@@ -21,7 +21,7 @@ jobs:
 
       - run: npm ci
 
-      - run: vite build --configLoader runner --base=./
+      - run: npm run build:electron
 
       - run: npx electron-builder --win --publish always
         env:
