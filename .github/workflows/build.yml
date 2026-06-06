@@ -57,18 +57,12 @@ jobs:
         working-directory: android
         run: ./gradlew assembleRelease
 
-      - name: Sign APK
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: android/app/build/outputs/apk/release
-          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-          alias: ${{ secrets.ANDROID_SIGNING_ALIAS }}
-          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/release/GreenCrownPOS.apk
 
       - name: Upload APK to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/*-signed.apk
+          files: android/app/build/outputs/apk/release/GreenCrownPOS.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
