@@ -6,7 +6,8 @@
   },
   "files": [
     "dist/**",
-    "electron/**"
+    "electron/**",
+    "public/**"
   ],
   "extraMetadata": {
     "main": "electron/main.cjs"
