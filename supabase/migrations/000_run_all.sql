@@ -199,6 +199,15 @@ CREATE TABLE IF NOT EXISTS contact_messages (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Anyone can insert contact messages" ON contact_messages FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "Service role can read contact messages" ON contact_messages FOR SELECT TO service_role USING (true);
-CREATE POLICY "Service role can update contact messages" ON contact_messages FOR UPDATE TO service_role USING (true);
+DO $$ BEGIN
+  CREATE POLICY "Anyone can insert contact messages" ON contact_messages FOR INSERT TO anon WITH CHECK (true);
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
+DO $$ BEGIN
+  CREATE POLICY "Service role can read contact messages" ON contact_messages FOR SELECT TO service_role USING (true);
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
+DO $$ BEGIN
+  CREATE POLICY "Service role can update contact messages" ON contact_messages FOR UPDATE TO service_role USING (true);
+EXCEPTION WHEN duplicate_object THEN null;
+END $$;
