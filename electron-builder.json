@@ -1,0 +1,48 @@
+{
+  "appId": "com.greencrown.pos",
+  "productName": "Green Crown POS",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**",
+    "electron/**"
+  ],
+  "extraMetadata": {
+    "main": "electron/main.cjs"
+  },
+  "win": {
+    "target": [
+      { "target": "nsis", "arch": ["x64"] }
+    ],
+    "icon": "public/icon.png",
+    "signAndEditExecutable": false
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "التاج الأخضر",
+    "language": "1025",
+    "installerIcon": "public/icon.ico",
+    "uninstallerIcon": "public/icon.ico",
+    "installerHeaderIcon": "public/icon.ico"
+  },
+  "mac": {
+    "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+    "icon": "public/icon.png",
+    "category": "public.app-category.business"
+  },
+  "linux": {
+    "target": [{ "target": "AppImage", "arch": ["x64"] }],
+    "icon": "public/icon.png",
+    "category": "Office"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "seririslam",
+    "repo": "greencrownkms",
+    "releaseType": "release"
+  }
+}
