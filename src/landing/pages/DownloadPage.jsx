@@ -6,7 +6,7 @@ export default function DownloadPage() {
   const { t } = useTranslation()
 
   const downloadLink = (filename) =>
-    `https://github.com/seririslam/greencrownkms/releases/latest/download/${filename}`
+      `https://github.com/mayesse/kms/releases/latest/download/${filename}`
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
@@ -27,6 +27,7 @@ export default function DownloadPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             href={downloadLink('Green-Crown-POS-Setup-2.0.0.exe')}
+            download
             className="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 text-center hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all"
           >
             <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -52,6 +53,7 @@ export default function DownloadPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             href={downloadLink('GreenCrownPOS.apk')}
+            download
             className="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 text-center hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all"
           >
             <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center group-hover:scale-110 transition-transform">
