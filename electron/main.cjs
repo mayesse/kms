@@ -458,7 +458,7 @@ function createWindow() {
     minHeight: 700,
     backgroundColor: '#0b0f0d',
     title: 'التاج الأخضر — Green Crown POS',
-    icon: path.join(__dirname, '../public/favicon.svg'),
+    icon: path.join(__dirname, '../public/icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
