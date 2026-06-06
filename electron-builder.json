@@ -41,8 +41,8 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "seririslam",
-    "repo": "greencrownkms",
+    "owner": "mayesse",
+    "repo": "kms",
     "releaseType": "release"
   }
 }
