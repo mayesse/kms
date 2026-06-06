@@ -21,6 +21,11 @@ jobs:
 
       - run: npm ci
 
+      - name: Set up env vars
+        run: |
+          echo "VITE_SUPABASE_URL=https://buxldhsiznwmdbdqvwfh.supabase.co" > .env.local
+          echo "VITE_SUPABASE_ANON_KEY=sb_publishable_ipbemriLw9IYj5v4kgzOIA_Yh-A3RyJ" >> .env.local
+
       - run: npm run build:electron
 
       - run: npx electron-builder --win --publish always
