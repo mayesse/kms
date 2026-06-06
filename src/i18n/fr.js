@@ -1123,6 +1123,14 @@ const fr = {
       desktopOnly: 'Disponible uniquement dans l\'application de bureau',
       downloadApp: 'Veuillez télécharger l\'application de bureau depuis notre site web',
     },
+    electronSetup: {
+      welcome: 'Bienvenue sur Green Crown POS',
+      subtitle: 'Votre système de gestion de magasin est prêt. Choisissez comment vous connecter.',
+      cloudTitle: 'Connecté aux serveurs Cloud',
+      cloudDesc: 'Vos données sont hébergées sur nos serveurs sécurisés. Sauvegardes automatiques, accessible de partout.',
+      continue: 'Continuer vers l\'application',
+      hfsqlOption: 'Utiliser une base de données locale (HFSQL)',
+    },
     trial: {
       expired: 'Votre essai gratuit a expiré — passez à la version payante pour continuer',
       remainingDays: '{{days}} jour(s) restant dans votre essai gratuit',

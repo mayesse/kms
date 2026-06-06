@@ -1392,6 +1392,14 @@ const en = {
       desktopOnly: 'Available in the desktop app only',
       downloadApp: 'Please download the desktop app from our website',
     },
+    electronSetup: {
+      welcome: 'Welcome to Green Crown POS',
+      subtitle: 'Your store management system is ready. Choose how to connect.',
+      cloudTitle: 'Connected to Cloud Servers',
+      cloudDesc: 'Your data is hosted on our secure servers. Automatic backups, accessible from anywhere.',
+      continue: 'Continue to App',
+      hfsqlOption: 'Use Local Database (HFSQL)',
+    },
     trial: {
       expired: 'Your free trial has ended — upgrade to continue',
       remainingDays: '{{days}} day(s) remaining in your free trial',

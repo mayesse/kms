@@ -15,6 +15,7 @@ import TrialGuard from './components/TrialGuard'
 import OfflineBanner from './components/OfflineBanner'
 import UpdateBanner from './components/UpdateBanner'
 import ErrorBoundary from './components/ErrorBoundary'
+import { isElectron, getStorageConfig } from './lib/adapters/storageConfig'
 
 // POS screens
 const POSScreen = lazy(() => import('./screens/pos/index'))
@@ -56,6 +57,7 @@ const PaymentPage = lazy(() => import('./landing/pages/PaymentPage'))
 const AccountOptionsPage = lazy(() => import('./landing/pages/AccountOptionsPage'))
 const AlgeriaCallback = lazy(() => import('./landing/pages/AlgeriaCallback'))
 const HfsqlSetupPage = lazy(() => import('./landing/pages/HfsqlSetupPage'))
+const ElectronSetupPage = lazy(() => import('./landing/pages/ElectronSetupPage'))
 const DownloadPage = lazy(() => import('./landing/pages/DownloadPage'))
 
 function AppShellFallback() {
@@ -89,6 +91,16 @@ export default function App() {
   }, [storeId, loadSettings, loadDeviceModules])
 
   const dir = document.documentElement.dir
+
+  // Redirect to Electron setup on first launch
+  useEffect(() => {
+    if (isElectron()) {
+      const cfg = getStorageConfig()
+      if (!cfg.setupComplete) {
+        window.location.hash = '#/setup'
+      }
+    }
+  }, [])
 
   return (
       <div className="relative min-h-screen">
@@ -170,6 +182,13 @@ export default function App() {
           <ErrorBoundary>
             <Suspense fallback={<PageFallback />}>
               <HfsqlSetupPage />
+            </Suspense>
+          </ErrorBoundary>
+        } />
+        <Route path="/setup" element={
+          <ErrorBoundary>
+            <Suspense fallback={<PageFallback />}>
+              <ElectronSetupPage />
             </Suspense>
           </ErrorBoundary>
         } />
