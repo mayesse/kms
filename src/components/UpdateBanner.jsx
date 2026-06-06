@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowDownCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
+import { checkForUpdate } from '../utils/appUpdate'
+import { isElectron } from '../lib/adapters/storageConfig'
 
 export default function UpdateBanner() {
   const { t } = useTranslation()
@@ -9,40 +11,68 @@ export default function UpdateBanner() {
   const [version, setVersion] = useState('')
 
   useEffect(() => {
-    if (typeof window.gc?.onUpdateStatus !== 'function') return
-    const unsub = window.gc.onUpdateStatus((type, data) => {
-      if (type === 'updateAvailable' || type === 'menuCheckUpdates') {
-        setStatus('available')
-        setVersion(data?.version || '')
-      } else if (type === 'updateProgress') {
-        setStatus('downloading')
-        setProgress(data?.percent || 0)
-      } else if (type === 'updateDownloaded') {
-        setStatus('downloaded')
-        setVersion(data?.version || '')
-      } else if (type === 'updateError') {
-        setStatus('error')
-      }
-    })
-    return unsub
+    if (isElectron()) {
+      if (typeof window.gc?.onUpdateStatus !== 'function') return
+      const unsub = window.gc.onUpdateStatus((type, data) => {
+        if (type === 'updateAvailable' || type === 'menuCheckUpdates') {
+          setStatus('available')
+          setVersion(data?.version || '')
+        } else if (type === 'updateProgress') {
+          setStatus('downloading')
+          setProgress(data?.percent || 0)
+        } else if (type === 'updateDownloaded') {
+          setStatus('downloaded')
+          setVersion(data?.version || '')
+        } else if (type === 'updateError') {
+          setStatus('error')
+        }
+      })
+      return unsub
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isElectron()) {
+      checkForUpdate().then(result => {
+        if (result?.updateAvailable) {
+          setStatus('available')
+          setVersion(result.version)
+        }
+      })
+    }
   }, [])
 
   const handleCheck = useCallback(async () => {
-    if (typeof window.gc?.checkForUpdates !== 'function') return
-    const result = await window.gc.checkForUpdates()
-    if (result?.updateAvailable) {
-      setStatus('available')
-      setVersion(result?.info?.version || '')
+    if (isElectron()) {
+      if (typeof window.gc?.checkForUpdates !== 'function') return
+      const result = await window.gc.checkForUpdates()
+      if (result?.updateAvailable) {
+        setStatus('available')
+        setVersion(result?.info?.version || '')
+      } else {
+        setStatus('upToDate')
+        setTimeout(() => setStatus(null), 3000)
+      }
     } else {
-      setStatus('upToDate')
-      setTimeout(() => setStatus(null), 3000)
+      const result = await checkForUpdate()
+      if (result?.updateAvailable) {
+        setStatus('available')
+        setVersion(result.version)
+      } else {
+        setStatus('upToDate')
+        setTimeout(() => setStatus(null), 3000)
+      }
     }
   }, [])
 
   const handleDownload = useCallback(async () => {
-    if (typeof window.gc?.downloadUpdate !== 'function') return
-    setStatus('downloading')
-    await window.gc.downloadUpdate()
+    if (isElectron()) {
+      if (typeof window.gc?.downloadUpdate !== 'function') return
+      setStatus('downloading')
+      await window.gc.downloadUpdate()
+    } else {
+      window.open('https://github.com/mayesse/kms/releases/latest/download/GreenCrownPOS.apk', '_blank')
+    }
   }, [])
 
   const handleInstall = useCallback(() => {
