@@ -1215,6 +1215,8 @@ const en = {
       message: 'Message',
       send: 'Send',
       success: 'Your message has been sent — we\'ll be in touch soon',
+      error: 'Failed to send message. Please try again.',
+      phonePlaceholder: 'Phone (optional)',
       salesEmail: 'sales@greencrown.store',
       salesPhone: '+213 XXX XX XX XX',
     },

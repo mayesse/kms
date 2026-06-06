@@ -3,21 +3,27 @@ import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { contactRepository } from '../../repositories/contactRepository'
 
 export default function ContactSection() {
   const { t } = useTranslation()
-  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.name || !form.email || !form.message) return
-    toast.success(t('landing.contact.success'))
-    setForm({ name: '', email: '', message: '' })
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
+    try {
+      await contactRepository.send(form.name, form.email, form.message, form.phone)
+      toast.success(t('landing.contact.success'))
+      setForm({ name: '', email: '', phone: '', message: '' })
+      setSubmitted(true)
+      setTimeout(() => setSubmitted(false), 3000)
+    } catch (err) {
+      toast.error(t('landing.contact.error'))
+    }
   }
 
   return (
@@ -83,6 +89,19 @@ export default function ContactSection() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                {t('landing.contact.phone')}
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow text-sm"
+                placeholder={t('landing.contact.phonePlaceholder')}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 {t('landing.contact.message')}
               </label>
               <textarea
@@ -117,7 +136,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t('landing.contact.email')}</p>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{t('landing.contact.salesEmail')}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">greencrownstore@gmail.com</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -126,7 +145,7 @@ export default function ContactSection() {
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{t('landing.contact.phone')}</p>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">{t('landing.contact.salesPhone')}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white" dir="ltr">0556679549</p>
               </div>
             </div>
           </motion.div>

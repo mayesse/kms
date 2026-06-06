@@ -1263,6 +1263,8 @@ const ar = {
       message: 'الرسالة',
       send: 'إرسال',
       success: 'تم إرسال رسالتك — سنتواصل معك قريباً',
+      error: 'فشل إرسال الرسالة. حاول مرة أخرى.',
+      phonePlaceholder: 'رقم الهاتف (اختياري)',
       salesEmail: 'sales@greencrown.store',
       salesPhone: '+213 XXX XX XX XX',
     },

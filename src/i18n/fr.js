@@ -946,6 +946,8 @@ const fr = {
       message: 'Message',
       send: 'Envoyer',
       success: 'Votre message a été envoyé — nous vous contacterons bientôt',
+      error: 'Échec de l\'envoi du message. Veuillez réessayer.',
+      phonePlaceholder: 'Téléphone (optionnel)',
       salesEmail: 'sales@greencrown.store',
       salesPhone: '+213 XXX XX XX XX',
     },
