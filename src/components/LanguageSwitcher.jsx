@@ -10,7 +10,7 @@ const LANGUAGES = [
 ]
 
 export default function LanguageSwitcher({ compact }) {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const current = i18n.language
 
   if (compact) {
