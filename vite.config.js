@@ -8,6 +8,12 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: 'remove-crossorigin',
+      transformIndexHtml(html) {
+        return html.replace(/\bcrossorigin\b/g, '')
+      },
+    },
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
