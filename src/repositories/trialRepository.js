@@ -15,6 +15,9 @@ export async function createTrial(storeId) {
 }
 
 export async function checkTrialLimit(storeId, resourceType) {
+  const sub = await getActiveSubscription(storeId)
+  if (sub) return
+
   const { data: trial, error } = await supabase
     .from('trials')
     .select('*')
@@ -42,6 +45,19 @@ export async function checkTrialLimit(storeId, resourceType) {
 }
 
 export async function getTrialInfo(storeId) {
+  const sub = await getActiveSubscription(storeId)
+  if (sub) {
+    return {
+      hasTrial: false,
+      hasSubscription: true,
+      subscription: sub,
+      remainingDays: 36500,
+      isExpired: false,
+      usage: { products: 0, sales: 0, suppliers: 0 },
+      limits: { products: 999999, sales: 999999, suppliers: 999999 },
+    }
+  }
+
   const { data, error } = await supabase.rpc('get_trial_info', { p_store_id: storeId })
   if (error) {
     const { data: fallback, error: fallbackError } = await supabase
@@ -65,4 +81,18 @@ export async function getTrialInfo(storeId) {
     }
   }
   return data
+}
+
+async function getActiveSubscription(storeId) {
+  try {
+    const { data } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('store_id', storeId)
+      .eq('status', 'active')
+      .maybeSingle()
+    return data
+  } catch {
+    return null
+  }
 }

@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next'
 export default function TrialBanner() {
   const { t } = useTranslation()
   const trial = useTrialStore(s => s.trial)
+  const hasSubscription = useTrialStore(s => s.hasSubscription)
   const usage = useTrialStore(s => s.usage)
   const limits = useTrialStore(s => s.limits)
   const remainingDays = useTrialStore(s => s.remainingDays)
   const isExpired = useTrialStore(s => s.isExpired)
 
-  if (!trial) return null
+  if (!trial || hasSubscription) return null
 
   const days = remainingDays()
   const expired = isExpired()
