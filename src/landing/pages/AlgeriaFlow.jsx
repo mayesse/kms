@@ -74,15 +74,12 @@ export default function AlgeriaFlow() {
 
       const { error: profileError } = await supabase.from('store_profiles').insert({
         id: authData.user.id,
-        name: form.storeName,
         store_name: form.storeName,
         owner_name: form.ownerName || form.storeName,
         phone: form.phone,
-        email: form.email,
         registration_method: 'email',
         business_type: 'retail',
         currency: 'DZD',
-        language: 'ar',
       })
 
       if (profileError) throw profileError

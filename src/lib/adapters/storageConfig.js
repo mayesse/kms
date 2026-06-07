@@ -38,4 +38,18 @@ export function isElectron() {
   return typeof window !== 'undefined' && window.gc?.platform
 }
 
+export function isAok() {
+  return typeof window !== 'undefined' && window.__AOK_MODE__ === true
+}
+
+export function isDesktopApp() {
+  return isElectron() || isAok()
+}
+
+export function getAppSource() {
+  if (isElectron()) return 'electron'
+  if (isAok()) return 'aok'
+  return 'web'
+}
+
 export { STORAGE_MODES }

@@ -26,12 +26,10 @@ export default function AlgeriaCallback() {
       if (!existing) {
         const { error: profileError } = await supabase.from('store_profiles').insert({
           id: session.user.id,
-          name: session.user.email?.split('@')[0] || 'My Store',
-          email: session.user.email,
+          store_name: session.user.email?.split('@')[0] || 'My Store',
           registration_method: 'google',
           business_type: 'retail',
           currency: 'DZD',
-          language: 'ar',
         })
         if (profileError) {
           setStatus('error')

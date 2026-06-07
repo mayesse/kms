@@ -22,6 +22,8 @@ const M = {
   TVA: 'tva',
   SERVICES: 'services',
   MODIFIERS: 'modifiers',
+  TOURISM: 'tourism',
+  ACADEMY: 'academy',
 }
 
 /** POS layout mode — drives default tab and checkout flow grouping */
@@ -85,6 +87,8 @@ export const EXTRA_MODULE_ROUTES = [
   { module: M.BRANCH, path: '/app/transfers', labelKey: 'nav.transfers' },
   { module: M.PROMO, path: '/app/promotions', labelKey: 'nav.promotions' },
   { module: M.STAFF, path: '/app/commissions', labelKey: 'nav.commissions' },
+  { module: M.TOURISM, path: '/app/tourism/dossiers', labelKey: 'nav.tourism' },
+  { module: M.ACADEMY, path: '/app/academy/students', labelKey: 'nav.academy' },
 ]
 
 export const BUSINESS_TYPES = [
@@ -293,6 +297,30 @@ export const BUSINESS_TYPES = [
     borderLight: 'border-slate-200 dark:border-slate-800',
     modules: [...RETAIL_MODULES, M.TVA],
     features: [F.TVA_CHECKOUT],
+  },
+  // === TOURISM AGENCY ===
+  {
+    id: 'tourism_agency',
+    icon: '✈️',
+    label: ar.businessTypes.tourism_agency,
+    description: ar.businessTypes.tourism_agencyDesc,
+    color: 'from-cyan-500 to-teal-600',
+    bgLight: 'bg-cyan-50 dark:bg-cyan-900/20',
+    borderLight: 'border-cyan-200 dark:border-cyan-800',
+    modules: [M.POS, M.INV, M.CUS, M.DEBT, M.REP, M.SES, M.SET, M.TOURISM],
+    features: [],
+  },
+  // === LANGUAGE ACADEMY ===
+  {
+    id: 'academy',
+    icon: '🎓',
+    label: ar.businessTypes.academy,
+    description: ar.businessTypes.academyDesc,
+    color: 'from-violet-500 to-purple-600',
+    bgLight: 'bg-violet-50 dark:bg-violet-900/20',
+    borderLight: 'border-violet-200 dark:border-violet-800',
+    modules: [M.POS, M.CUS, M.REP, M.SES, M.SET, M.APPT, M.STAFF, M.ACADEMY],
+    features: [F.STAFF_AT_CHECKOUT],
   },
   // === FRANCHISE / MULTI-BRANCH ===
   {

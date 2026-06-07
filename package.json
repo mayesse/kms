@@ -16,6 +16,7 @@
     "electron:dev": "node electron/dev.mjs",
     "electron:build": "vite build --configLoader runner --base=./ && cross-env ELECTRON_BUILDER_CACHE=.electron-builder-cache electron-builder",
     "build:win": "vite build --configLoader runner --base=./ && cross-env ELECTRON_BUILDER_CACHE=.electron-builder-cache electron-builder --win",
+    "build:aok": "vite build --config vite.aok.config.js",
     "cap:init": "npx cap init",
     "cap:add:android": "npx cap add android",
     "cap:sync": "npx cap sync",
@@ -73,5 +74,8 @@
     "vite-plugin-pwa": "^1.3.0",
     "vitest": "^3.1.3",
     "wait-on": "^8.0.2"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

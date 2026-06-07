@@ -111,16 +111,26 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  register: async (email, password, storeName, ownerName) => {
+  register: async (email, password, storeName, ownerName, phone, appSource) => {
     set({ isLoading: true, error: null })
     try {
+      const meta = { store_name: storeName, owner_name: ownerName }
+      if (phone) meta.phone = phone
+      if (appSource) meta.app_source = appSource
       const { data, error } = await supabase.auth.signUp({
         email, password,
-        options: { data: { store_name: storeName, owner_name: ownerName } },
+        options: { data: meta },
       })
       if (error) throw error
       if (data.session) {
-        set({ user: data.user, storeId: data.user.id, session: data.session, isLoading: false })
+        set({ user: data.user, storeId: data.user.id, session: data.session })
+        let businessType = null
+        for (let i = 0; i < 5; i++) {
+          businessType = await fetchBusinessType(data.user.id)
+          if (businessType !== undefined) break
+          await new Promise(r => setTimeout(r, 500))
+        }
+        set({ businessType, isLoading: false })
         return { success: true }
       }
       set({ isLoading: false })

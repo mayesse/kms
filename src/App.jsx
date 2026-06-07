@@ -15,12 +15,13 @@ import TrialGuard from './components/TrialGuard'
 import OfflineBanner from './components/OfflineBanner'
 import UpdateBanner from './components/UpdateBanner'
 import ErrorBoundary from './components/ErrorBoundary'
-import { isElectron, getStorageConfig } from './lib/adapters/storageConfig'
+import { isElectron, isDesktopApp, getStorageConfig } from './lib/adapters/storageConfig'
 
 // POS screens
 const POSScreen = lazy(() => import('./screens/pos/index'))
 const LoginScreen = lazy(() => import('./screens/auth/LoginScreen'))
 const RegisterScreen = lazy(() => import('./screens/auth/RegisterScreen'))
+const LoginRegisterScreen = lazy(() => import('./screens/auth/LoginRegisterScreen'))
 const InventoryScreen = lazy(() => import('./screens/inventory/index'))
 const PurchasesScreen = lazy(() => import('./screens/purchases/index'))
 const ReportsScreen = lazy(() => import('./screens/reports/index'))
@@ -43,6 +44,21 @@ const StaffScreen = lazy(() => import('./screens/staff/index'))
 const ServicesScreen = lazy(() => import('./screens/services/index'))
 const WorkOrdersScreen = lazy(() => import('./screens/work_orders/index'))
 const ModifiersScreen = lazy(() => import('./screens/modifiers/index'))
+const TourismLayout = lazy(() => import('./screens/tourism/index'))
+const DossiersScreen = lazy(() => import('./screens/tourism/DossiersScreen'))
+const TourismPackagesScreen = lazy(() => import('./screens/tourism/PackagesScreen'))
+const HajjScreen = lazy(() => import('./screens/tourism/HajjScreen'))
+const TourismClientsScreen = lazy(() => import('./screens/tourism/ClientsScreen'))
+const TourismPaymentsScreen = lazy(() => import('./screens/tourism/PaymentsScreen'))
+const TourismReportsScreen = lazy(() => import('./screens/tourism/ReportsScreen'))
+const TourismSuppliersScreen = lazy(() => import('./screens/tourism/SuppliersScreen'))
+const AcademyLayout = lazy(() => import('./screens/academy/index'))
+const StudentsScreen = lazy(() => import('./screens/academy/StudentsScreen'))
+const ScheduleScreen = lazy(() => import('./screens/academy/ScheduleScreen'))
+const TeachersScreen = lazy(() => import('./screens/academy/TeachersScreen'))
+const BillingScreen = lazy(() => import('./screens/academy/BillingScreen'))
+const CoursesScreen = lazy(() => import('./screens/academy/CoursesScreen'))
+const AcademyReportsScreen = lazy(() => import('./screens/academy/ReportsScreen'))
 const BusinessTypeSelection = lazy(() => import('./screens/onboarding/BusinessTypeSelection'))
 
 // Landing pages
@@ -74,6 +90,7 @@ export default function App() {
   const session = useAuthStore((s) => s.session)
   const storeId = useAuthStore((s) => s.storeId)
   const businessType = useAuthStore((s) => s.businessType)
+  const authLoading = useAuthStore((s) => s.isLoading)
   const loadSettings = useSettingsStore((s) => s.load)
   const loadDeviceModules = useDeviceModulesStore((s) => s.load)
   const isOnline = useOnlineStatus()
@@ -107,12 +124,26 @@ export default function App() {
         {!isOnline && <OfflineBanner />}
         <UpdateBanner />
       <Routes>
-        {/* Public landing routes */}
+        {/* Public landing routes — redirect to auth gate on desktop */}
         <Route path="/" element={
           <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <LandingPage />
-            </Suspense>
+            {isDesktopApp() ? (
+              authLoading ? (
+                <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+                  <LoadingSkeleton count={3} height="h-8" />
+                </div>
+              ) : !session ? (
+                <Suspense fallback={<PageFallback />}>
+                  <LoginRegisterScreen />
+                </Suspense>
+              ) : (
+                <Navigate to="/app/" replace />
+              )
+            ) : (
+              <Suspense fallback={<PageFallback />}>
+                <LandingPage />
+              </Suspense>
+            )}
           </ErrorBoundary>
         } />
         <Route path="/demo" element={
@@ -250,6 +281,25 @@ export default function App() {
           <Route path="/app/transfers" element={<Suspense fallback={<div className="p-4"><LoadingSkeleton count={4} height="h-16" /></div>}><RouteModuleGuard module="branches"><TransfersScreen /></RouteModuleGuard></Suspense>} />
           <Route path="/app/services" element={<Suspense fallback={<div className="p-4"><LoadingSkeleton count={4} height="h-16" /></div>}><RouteModuleGuard module="services"><ServicesScreen /></RouteModuleGuard></Suspense>} />
           <Route path="/app/modifiers" element={<Suspense fallback={<div className="p-4"><LoadingSkeleton count={4} height="h-16" /></div>}><RouteModuleGuard module="modifiers"><ModifiersScreen /></RouteModuleGuard></Suspense>} />
+          <Route path="/app/tourism" element={<Suspense fallback={<div className="p-4"><LoadingSkeleton count={4} height="h-16" /></div>}><RouteModuleGuard module="tourism"><TourismLayout /></RouteModuleGuard></Suspense>}>
+            <Route index element={<Navigate to="dossiers" replace />} />
+            <Route path="dossiers" element={<DossiersScreen />} />
+            <Route path="packages" element={<TourismPackagesScreen />} />
+            <Route path="hajj" element={<HajjScreen />} />
+            <Route path="clients" element={<TourismClientsScreen />} />
+            <Route path="payments" element={<TourismPaymentsScreen />} />
+            <Route path="suppliers" element={<TourismSuppliersScreen />} />
+            <Route path="reports" element={<TourismReportsScreen />} />
+          </Route>
+          <Route path="/app/academy" element={<Suspense fallback={<div className="p-4"><LoadingSkeleton count={4} height="h-16" /></div>}><RouteModuleGuard module="academy"><AcademyLayout /></RouteModuleGuard></Suspense>}>
+            <Route index element={<Navigate to="students" replace />} />
+            <Route path="students" element={<StudentsScreen />} />
+            <Route path="schedule" element={<ScheduleScreen />} />
+            <Route path="teachers" element={<TeachersScreen />} />
+            <Route path="billing" element={<BillingScreen />} />
+            <Route path="courses" element={<CoursesScreen />} />
+            <Route path="reports" element={<AcademyReportsScreen />} />
+          </Route>
         </Route>
 
         {/* Fallback */}

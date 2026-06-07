@@ -1,0 +1,2 @@
+import{q as e}from"./aok-index-D7j5lhnZ.js";var t=e();function n({children:e,className:n=``,onClick:r}){return(0,t.jsx)(`div`,{className:`bg-white dark:bg-gray-800 rounded-xl border border-gray-200
+                  dark:border-gray-700 p-4 shadow-sm ${r?`cursor-pointer active:scale-[0.98] transition-transform`:``} ${n}`,onClick:r,children:e})}export{n as t};

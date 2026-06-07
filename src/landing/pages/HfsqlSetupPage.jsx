@@ -52,7 +52,7 @@ export default function HfsqlSetupPage() {
       connection: { host, port: parseInt(port), database, username, password },
     })
     toast.success(t('onboarding.hfsqlSetup.saved'))
-    navigate('/app/auth/login')
+    navigate('/')
   }
 
   const isDesktop = isElectron()

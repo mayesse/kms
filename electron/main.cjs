@@ -456,6 +456,8 @@ function createWindow() {
     height: state.height,
     minWidth: 1024,
     minHeight: 700,
+    frame: false,
+    titleBarStyle: 'hidden',
     backgroundColor: '#0b0f0d',
     title: 'التاج الأخضر — Green Crown POS',
     icon: path.join(__dirname, '../public/icon.png'),

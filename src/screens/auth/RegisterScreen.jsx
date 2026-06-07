@@ -12,21 +12,34 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('')
   const [storeName, setStoreName] = useState('')
   const [ownerName, setOwnerName] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
   const navigate = useNavigate()
 
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle)
 
+  const validate = () => {
+    const errors = {}
+    if (!storeName.trim()) errors.storeName = t('auth.storeNameRequired')
+    if (!email.trim()) errors.email = t('auth.emailRequired')
+    else if (!/\S+@\S+\.\S+/.test(email)) errors.email = t('auth.invalidEmail')
+    if (!password) errors.password = t('auth.passwordRequired')
+    else if (password.length < 6) errors.password = t('auth.passwordMinLength')
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!validate()) return
     const result = await register(email, password, storeName, ownerName)
     if (result.success) {
       if (result.needsEmailConfirm) {
         toast.success(t('auth.accountCreatedCheckEmail'))
       } else {
         toast.success(t('auth.accountCreated'))
-        navigate('/', { replace: true })
+        navigate('/app/onboarding/business-type', { replace: true })
       }
     } else {
       toast.error(result.error || t('common.error'))
@@ -69,6 +82,7 @@ export default function RegisterScreen() {
             onChange={setStoreName}
             required
             autoFocus
+            error={fieldErrors.storeName}
           />
           <FormInput
             label={t('auth.ownerName')}
@@ -82,6 +96,7 @@ export default function RegisterScreen() {
             type="email"
             required
             dir="ltr"
+            error={fieldErrors.email}
           />
           <FormInput
             label={t('auth.password')}
@@ -90,6 +105,7 @@ export default function RegisterScreen() {
             type="password"
             required
             dir="ltr"
+            error={fieldErrors.password}
           />
 
           <button type="submit" disabled={isLoading} className="btn-primary mt-6">

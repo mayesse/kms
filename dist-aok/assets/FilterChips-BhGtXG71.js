@@ -1,0 +1,2 @@
+import{q as e}from"./aok-index-D7j5lhnZ.js";var t=e();function n({options:e,value:n,onChange:r}){return(0,t.jsx)(`div`,{className:`flex gap-2 overflow-x-auto pb-1 no-scrollbar`,children:e.map(e=>(0,t.jsx)(`button`,{onClick:()=>r(e.value),className:`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all
+                     active:scale-95 ${n===e.value?`bg-green-600 text-white`:`bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300`}`,children:e.label},e.value))})}export{n as t};

@@ -18,7 +18,7 @@ export default function ElectronSetupPage() {
 
   const handleContinue = () => {
     setStorageConfig({ mode: STORAGE_MODES.CLOUD, setupComplete: true })
-    navigate('/app/auth/login', { replace: true })
+    navigate('/', { replace: true })
   }
 
   const handleHfsql = () => {
