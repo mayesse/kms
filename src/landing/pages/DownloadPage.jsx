@@ -26,7 +26,7 @@ export default function DownloadPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            href={downloadLink('Green-Crown-POS-Setup-2.0.0.exe')}
+            href={downloadLink('Green-Crown-POS-Setup-2.1.0.exe')}
             download
             className="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 text-center hover:shadow-lg hover:border-emerald-300 dark:hover:border-emerald-600 transition-all"
           >
