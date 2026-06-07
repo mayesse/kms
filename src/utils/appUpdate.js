@@ -1,7 +1,7 @@
 import { isElectron } from '../lib/adapters/storageConfig'
 
 const GITHUB_API = 'https://api.github.com/repos/mayesse/kms/releases/latest'
-const APP_VERSION = '2.1.0'
+const APP_VERSION = '2.1.1'
 
 export async function checkForUpdate() {
   try {

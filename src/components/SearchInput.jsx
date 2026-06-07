@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 
-const SearchInput = forwardRef(({ value, onChange, placeholder, autoFocus = false }, ref) => {
+const SearchInput = forwardRef(({ value, onChange, placeholder, autoFocus = false, onEnter }, ref) => {
   return (
     <div className="relative">
       <input
@@ -15,6 +15,7 @@ const SearchInput = forwardRef(({ value, onChange, placeholder, autoFocus = fals
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter' && onEnter) onEnter(e.target.value) }}
         autoFocus={autoFocus}
         dir="rtl"
       />

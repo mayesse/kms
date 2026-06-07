@@ -418,6 +418,21 @@ export default function CheckoutSheet({ isOpen, onClose, onSaleComplete }) {
     queryClient.invalidateQueries(['activityLog', storeId])
   }
 
+  const handleConfirmRef = useRef(handleConfirm)
+  handleConfirmRef.current = handleConfirm
+
+  useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (e) => {
+      if (e.key === 'Enter' && !loading && !printBtnLoading) {
+        e.preventDefault()
+        handleConfirmRef.current()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, loading, printBtnLoading])
+
   const receiptLabels = useMemo(() => buildReceiptLabels(t), [t])
 
   const buildPrintPayload = (result) => ({

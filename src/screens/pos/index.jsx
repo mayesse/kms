@@ -483,6 +483,14 @@ export default function POSScreen() {
     setUnitSelectionProduct(null)
   }
 
+  const handleSearchEnter = useCallback((text) => {
+    const code = text?.trim()
+    if (!code || code.length < 4) return
+    handleBarcodeScan(code).then(() => {
+      setSearch('')
+    })
+  }, [handleBarcodeScan])
+
   const handleSaleComplete = useCallback(async (result) => {
     if (!result?.sale_id) return
     if (result.printed) {
@@ -494,15 +502,7 @@ export default function POSScreen() {
       }
       return
     }
-    try {
-      const [saleData, profile] = await Promise.all([
-        saleRepository.getSaleDetail(storeId, result.sale_id),
-        settingsRepository.get(storeId),
-      ])
-      setInvoiceSaleData({ sale: saleData, profile })
-    } catch {
-      toast.success(t('toast.saleCreated'))
-    }
+    toast.success(t('toast.saleCreated'))
   }, [storeId, t])
 
   return (
@@ -598,7 +598,7 @@ export default function POSScreen() {
                     searchInputRef={searchRef}
                   />
                 ) : (
-                  <SearchInput ref={searchRef} value={search} onChange={setSearch} placeholder={t('pos.search')} autoFocus />
+                  <SearchInput ref={searchRef} value={search} onChange={setSearch} placeholder={t('pos.search')} autoFocus onEnter={handleSearchEnter} />
                 )}
               </div>
               <button onClick={() => setShowScanner(true)}
