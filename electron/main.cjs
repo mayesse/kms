@@ -4,10 +4,12 @@ const {
 } = require('electron')
 const path = require('path')
 const fs = require('fs')
+const http = require('http')
 
 const isDev = !app.isPackaged
 let mainWindow = null
 let powerSaveId = null
+let httpServer = null
 
 // ─── Auto-updater ───
 let autoUpdater = null
@@ -497,7 +499,41 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    const distDir = path.join(__dirname, '../dist')
+    const mimeTypes = {
+      '.html': 'text/html; charset=utf-8',
+      '.js': 'application/javascript; charset=utf-8',
+      '.css': 'text/css; charset=utf-8',
+      '.png': 'image/png',
+      '.ico': 'image/x-icon',
+      '.svg': 'image/svg+xml',
+      '.woff2': 'font/woff2',
+      '.json': 'application/json',
+      '.webmanifest': 'application/manifest+json',
+    }
+    httpServer = http.createServer((req, res) => {
+      let filePath = path.join(distDir, req.url === '/' ? 'index.html' : req.url)
+      const ext = path.extname(filePath)
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          // SPA fallback: serve index.html for any non-file route
+          fs.readFile(path.join(distDir, 'index.html'), (err2, data2) => {
+            if (err2) { res.writeHead(500); res.end('500'); return }
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+            res.end(data2)
+          })
+          return
+        }
+        res.writeHead(200, { 'Content-Type': mimeTypes[ext] || 'application/octet-stream' })
+        res.end(data)
+      })
+    })
+    const port = process.env.GC_DEV_PORT || 0
+    httpServer.listen(port, () => {
+      const addr = httpServer.address()
+      const portNum = addr.port
+      mainWindow.loadURL(`http://127.0.0.1:${portNum}`)
+    })
   }
 
   mainWindow.on('resize', () => saveWindowState(mainWindow))
