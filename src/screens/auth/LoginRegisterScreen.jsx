@@ -19,7 +19,19 @@ export default function LoginRegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [storeName, setStoreName] = useState('')
   const [ownerName, setOwnerName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [phone, setPhone] = useState('+213')
+
+  const formatPhone = (value) => {
+    const cleaned = value.replace(/[^\d+]/g, '')
+    if (!cleaned.startsWith('+213')) return '+213'
+    const digits = cleaned.slice(4).replace(/\D/g, '').slice(0, 9)
+    let formatted = '+213'
+    for (let i = 0; i < digits.length; i++) {
+      if (i === 2 || i === 5) formatted += ' '
+      formatted += digits[i]
+    }
+    return formatted
+  }
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -183,7 +195,7 @@ export default function LoginRegisterScreen() {
             <FormInput
               label={t('auth.phoneNumber')}
               value={phone}
-              onChange={setPhone}
+              onChange={(v) => setPhone(formatPhone(v))}
               type="tel"
               required
               dir="ltr"

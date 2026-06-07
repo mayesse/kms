@@ -12,12 +12,26 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('')
   const [storeName, setStoreName] = useState('')
   const [ownerName, setOwnerName] = useState('')
+  const [phone, setPhone] = useState('+213')
   const [fieldErrors, setFieldErrors] = useState({})
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
   const navigate = useNavigate()
 
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle)
+  const isElectron = window.navigator.userAgent.toLowerCase().includes('electron')
+
+  const formatPhone = (value) => {
+    const cleaned = value.replace(/[^\d+]/g, '')
+    if (!cleaned.startsWith('+213')) return '+213'
+    const digits = cleaned.slice(4).replace(/\D/g, '').slice(0, 9)
+    let formatted = '+213'
+    for (let i = 0; i < digits.length; i++) {
+      if (i === 2 || i === 5) formatted += ' '
+      formatted += digits[i]
+    }
+    return formatted
+  }
 
   const validate = () => {
     const errors = {}
@@ -26,6 +40,8 @@ export default function RegisterScreen() {
     else if (!/\S+@\S+\.\S+/.test(email)) errors.email = t('auth.invalidEmail')
     if (!password) errors.password = t('auth.passwordRequired')
     else if (password.length < 6) errors.password = t('auth.passwordMinLength')
+    if (!phone || phone === '+213') errors.phone = t('auth.phoneRequired')
+    else if (phone.replace(/\s/g, '').length < 13) errors.phone = t('auth.phoneRequired')
     setFieldErrors(errors)
     return Object.keys(errors).length === 0
   }
@@ -33,7 +49,9 @@ export default function RegisterScreen() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!validate()) return
-    const result = await register(email, password, storeName, ownerName)
+    const appSource = isElectron ? 'electron' : 'web'
+    const cleanPhone = phone.replace(/\s/g, '')
+    const result = await register(email, password, storeName, ownerName, cleanPhone, appSource)
     if (result.success) {
       if (result.needsEmailConfirm) {
         toast.success(t('auth.accountCreatedCheckEmail'))
@@ -88,6 +106,15 @@ export default function RegisterScreen() {
             label={t('auth.ownerName')}
             value={ownerName}
             onChange={setOwnerName}
+          />
+          <FormInput
+            label={t('auth.phoneNumber')}
+            value={phone}
+            onChange={(v) => setPhone(formatPhone(v))}
+            type="tel"
+            required
+            dir="ltr"
+            error={fieldErrors.phone}
           />
           <FormInput
             label={t('auth.email')}
