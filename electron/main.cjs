@@ -447,8 +447,47 @@ ipcMain.handle('gc:hfsql:saveConfig', async (event, config) => {
   }
 })
 
+// ─── Static file server for production (serves dist/ via HTTP to support ES modules) ───
+let httpServer = null
+const MIME = {
+  '.html': 'text/html; charset=utf-8',
+  '.js': 'application/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8',
+  '.json': 'application/json; charset=utf-8',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon',
+  '.webmanifest': 'application/manifest+json',
+  '.woff2': 'font/woff2',
+}
+
+function startFileServer() {
+  const http = require('http')
+  const dist = path.join(__dirname, '../dist')
+  httpServer = http.createServer((req, res) => {
+    let filePath = path.join(dist, req.url === '/' ? 'index.html' : req.url.replace(/^\//, ''))
+    const ext = path.extname(filePath)
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        // SPA fallback — serve index.html for any unknown route
+        fs.readFile(path.join(dist, 'index.html'), (err2, data2) => {
+          if (err2) { res.writeHead(500); res.end('Internal error'); return }
+          res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' })
+          res.end(data2)
+        })
+        return
+      }
+      res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' })
+      res.end(data)
+    })
+  })
+  return new Promise(resolve => {
+    httpServer.listen(0, '127.0.0.1', () => resolve(httpServer.address().port))
+  })
+}
+
 // ─── Window creation ───
-function createWindow() {
+async function createWindow() {
   const state = loadWindowState()
 
   mainWindow = new BrowserWindow({
@@ -474,30 +513,31 @@ function createWindow() {
     return { action: 'deny' }
   })
 
-  // Content Security Policy
-  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [
-          "default-src 'self'; " +
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
-          "font-src 'self' https://fonts.gstatic.com; " +
-          "img-src 'self' data: blob:; " +
-          "media-src 'self' mediastream:; " +
-          "connect-src 'self' https://*.supabase.co ws://localhost:* http://localhost:*; " +
-          "worker-src 'self' blob:;",
-        ],
-      },
-    })
-  })
-
   if (isDev) {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools({ mode: 'detach' })
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    const port = await startFileServer()
+    mainWindow.loadURL(`http://127.0.0.1:${port}/`)
+
+    // Inject CSP via response headers
+    mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'Content-Security-Policy': [
+            "default-src 'self'; " +
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+            "font-src 'self' https://fonts.gstatic.com; " +
+            "img-src 'self' data: blob:; " +
+            "media-src 'self' mediastream:; " +
+            "connect-src 'self' https://*.supabase.co ws://localhost:* http://localhost:*; " +
+            "worker-src 'self' blob:;",
+          ],
+        },
+      })
+    })
   }
 
   mainWindow.on('resize', () => saveWindowState(mainWindow))
@@ -523,5 +563,9 @@ app.on('before-quit', () => {
   if (powerSaveId) {
     powerSaveBlocker.stop(powerSaveId)
     powerSaveId = null
+  }
+  if (httpServer) {
+    httpServer.close()
+    httpServer = null
   }
 })
