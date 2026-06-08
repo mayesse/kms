@@ -27,7 +27,7 @@ export default function Footer() {
               {productLinks.map((key) => (
                 <li key={key}>
                   {key === 'pricing' || key === 'demo' || key === 'download' ? (
-                    <Link to={key === 'pricing' ? '/register/pricing' : key === 'download' ? '/download' : '/demo'} className={linkClass}>
+                    <Link to={key === 'pricing' ? '/app/auth/register' : key === 'download' ? '/download' : '/demo'} className={linkClass}>
                       {t(`landing.footer.${key}`)}
                     </Link>
                   ) : (

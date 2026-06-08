@@ -8,7 +8,7 @@ const navLinks = [
   { key: 'features', href: '#features' },
   { key: 'industries', href: '#industries' },
   { key: 'ai', href: '#ai' },
-  { key: 'pricing', href: '/register/pricing' },
+  { key: 'auth', href: '/app/auth/register' },
   { key: 'download', href: '/download' },
   { key: 'contact', href: '#contact' },
 ]
@@ -66,7 +66,7 @@ export default function Navbar() {
               {t('landing.nav.language')}
             </button>
             <Link
-              to="/register"
+              to="/app/auth/register"
               className="inline-flex items-center px-5 py-2 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-colors shadow-sm"
             >
               {t('landing.nav.getStarted')}
@@ -109,7 +109,7 @@ export default function Navbar() {
                   {t('landing.nav.language')}
                 </button>
                 <Link
-                  to="/register"
+                  to="/app/auth/register"
                   onClick={() => setMobileOpen(false)}
                   className="flex-1 text-center px-5 py-2 text-sm font-semibold text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg"
                 >

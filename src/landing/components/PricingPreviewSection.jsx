@@ -92,7 +92,7 @@ export default function PricingPreviewSection() {
                 </ul>
 
                 <Link
-                  to="/register/pricing"
+                  to="/app/auth/register"
                   className={`mt-8 w-full py-3 px-6 rounded-xl font-semibold text-sm transition-colors shadow-sm text-center ${
                     tier.popular
                       ? 'bg-emerald-500 hover:bg-emerald-600 text-white'

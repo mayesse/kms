@@ -22,7 +22,8 @@ export default function ElectronSetupPage() {
   }
 
   const handleHfsql = () => {
-    navigate('/register/hfsql-setup', { replace: true })
+    setStorageConfig({ mode: STORAGE_MODES.HFSQL, setupComplete: true })
+    navigate('/', { replace: true })
   }
 
   return (

@@ -153,7 +153,7 @@ export default function DesktopNav() {
       {trial && (
         <div className="px-3 pt-2">
           <NavLink
-            to="/register/pricing"
+            to="/app/auth/register"
             className="flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-semibold bg-white/15 hover:bg-white/25 text-white transition-colors"
           >
             {isExpired ? (

@@ -64,15 +64,7 @@ const BusinessTypeSelection = lazy(() => import('./screens/onboarding/BusinessTy
 // Landing pages
 const LandingPage = lazy(() => import('./landing/pages/LandingPage'))
 const DemoPage = lazy(() => import('./landing/pages/DemoPage'))
-const RegionSelect = lazy(() => import('./landing/pages/RegionSelect'))
-const AlgeriaFlow = lazy(() => import('./landing/pages/AlgeriaFlow'))
-const PricingPage = lazy(() => import('./landing/pages/PricingPage'))
-const SubscriptionPage = lazy(() => import('./landing/pages/SubscriptionPage'))
-const BillingPage = lazy(() => import('./landing/pages/BillingPage'))
-const PaymentPage = lazy(() => import('./landing/pages/PaymentPage'))
-const AccountOptionsPage = lazy(() => import('./landing/pages/AccountOptionsPage'))
-const AlgeriaCallback = lazy(() => import('./landing/pages/AlgeriaCallback'))
-const HfsqlSetupPage = lazy(() => import('./landing/pages/HfsqlSetupPage'))
+// These are kept for now but no longer routed — landing registration removed.
 const ElectronSetupPage = lazy(() => import('./landing/pages/ElectronSetupPage'))
 const DownloadPage = lazy(() => import('./landing/pages/DownloadPage'))
 
@@ -153,69 +145,7 @@ export default function App() {
             </Suspense>
           </ErrorBoundary>
         } />
-        <Route path="/register" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <RegionSelect />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/algeria" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <AlgeriaFlow />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/algeria/callback" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <AlgeriaCallback />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/pricing" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <PricingPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/subscribe" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <SubscriptionPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/billing" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <BillingPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/payment" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <PaymentPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/account-options" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <AccountOptionsPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
-        <Route path="/register/hfsql-setup" element={
-          <ErrorBoundary>
-            <Suspense fallback={<PageFallback />}>
-              <HfsqlSetupPage />
-            </Suspense>
-          </ErrorBoundary>
-        } />
+        {/* /register routes removed — use /app/auth/register instead */}
         <Route path="/setup" element={
           <ErrorBoundary>
             <Suspense fallback={<PageFallback />}>

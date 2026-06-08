@@ -45,7 +45,7 @@ export default function TrialBanner() {
             />
           </div>
           <span className="text-gray-400 dark:text-gray-500">•</span>
-          <Link to="/register/pricing" className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium">
+          <Link to="/app/auth/register" className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium">
             {t('onboarding.pricing.upgrade')}
           </Link>
         </div>
