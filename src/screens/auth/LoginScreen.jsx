@@ -1,4 +1,4 @@
-﻿import { useState } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
@@ -12,7 +12,12 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('')
   const login = useAuthStore((s) => s.login)
   const isLoading = useAuthStore((s) => s.isLoading)
+  const session = useAuthStore((s) => s.session)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (session) navigate('/app/', { replace: true })
+  }, [session, navigate])
 
   const signInWithGoogle = useAuthStore((s) => s.signInWithGoogle)
 
@@ -20,7 +25,7 @@ export default function LoginScreen() {
     e.preventDefault()
     const result = await login(email, password)
     if (result.success) {
-      navigate('/', { replace: true })
+      navigate('/app/', { replace: true })
     } else {
       toast.error(result.error || t('common.error'))
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useAuthStore } from '../../stores/authStore'
@@ -12,6 +12,7 @@ export default function LoginRegisterScreen() {
   const login = useAuthStore((s) => s.login)
   const register = useAuthStore((s) => s.register)
   const isLoading = useAuthStore((s) => s.isLoading)
+  const session = useAuthStore((s) => s.session)
   const [tab, setTab] = useState('login')
 
   const [email, setEmail] = useState('')
@@ -36,6 +37,10 @@ export default function LoginRegisterScreen() {
   const [fieldErrors, setFieldErrors] = useState({})
 
   const appSource = getAppSource()
+
+  useEffect(() => {
+    if (session) navigate('/app/', { replace: true })
+  }, [session, navigate])
 
   const validateLogin = () => {
     const errors = {}
@@ -66,7 +71,7 @@ export default function LoginRegisterScreen() {
     if (!validateLogin()) return
     const result = await login(email, password)
     if (result.success) {
-      navigate('/', { replace: true })
+      navigate('/app/', { replace: true })
     } else {
       setError(result.error || t('common.error'))
     }
@@ -81,7 +86,7 @@ export default function LoginRegisterScreen() {
       if (result.needsEmailConfirm) {
         setError(t('auth.accountCreatedCheckEmail'))
       } else {
-        navigate('/', { replace: true })
+        navigate('/app/onboarding/business-type', { replace: true })
       }
     } else {
       setError(result.error || t('common.error'))
