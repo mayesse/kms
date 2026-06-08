@@ -7,8 +7,7 @@ import de from './de'
 import it from './it'
 
 const saved = localStorage.getItem('lang')
-const detected = saved || navigator.language?.slice(0, 2) || 'ar'
-const fallback = ['ar', 'en', 'fr', 'de', 'it'].includes(detected) ? detected : 'ar'
+const fallback = saved || 'ar'
 
 i18n.use(initReactI18next).init({
   resources: {
