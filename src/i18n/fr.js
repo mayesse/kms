@@ -404,6 +404,14 @@ const fr = {
     seriesA: 'Série A',
     seriesB: 'Série B',
     seriesC: 'Série C',
+    // HFSQL Database
+    databaseTitle: 'Base de données',
+    databaseSubtitle: 'Connexion HFSQL locale',
+    hfsqlConnected: 'Connecté à la base HFSQL',
+    hfsqlNotConnected: 'Non connecté à une base locale',
+    hfsqlNotConnectedDesc: 'Connectez votre base HFSQL pour utiliser le stockage local au lieu du cloud',
+    hfsqlDisconnect: 'Déconnecter',
+    hfsqlDisconnected: 'Déconnecté de la base, retour en mode cloud',
   },
 
   moduleNames: {

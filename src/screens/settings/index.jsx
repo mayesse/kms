@@ -15,6 +15,7 @@ import BottomSheet from '../../components/BottomSheet'
 import LanguageSwitcher from '../../components/LanguageSwitcher'
 import { formatCurrency } from '../../utils/format'
 import DeviceModulesSection from './DeviceModulesSection'
+import HfsqlSection from './HfsqlSection'
 import WelcomeTour from '../../components/WelcomeTour'
 import { useTranslation } from 'react-i18next'
 import {
@@ -30,6 +31,7 @@ import {
   CloudArrowUpIcon,
   CurrencyDollarIcon,
   AdjustmentsHorizontalIcon,
+  ServerStackIcon,
 } from '@heroicons/react/24/outline'
 
 /* eslint-disable react-hooks/set-state-in-effect */
@@ -84,6 +86,11 @@ const SETTINGS_SECTIONS = [
     id: 'fiscal', icon: DocumentTextIcon,
     iconColor: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
     titleKey: 'settings.fiscalTitle', subtitleKey: 'settings.fiscalSubtitle',
+  },
+  {
+    id: 'database', icon: ServerStackIcon,
+    iconColor: 'bg-slate-100 text-slate-600 dark:bg-slate-900/30 dark:text-slate-400',
+    titleKey: 'settings.databaseTitle', subtitleKey: 'settings.databaseSubtitle',
   },
 ]
 
@@ -721,6 +728,11 @@ export default function SettingsScreen() {
       {/* ─── Device Modules Sheet ─── */}
       <BottomSheet isOpen={activeSection === 'device'} onClose={() => setActiveSection(null)} title={t('settings.deviceModules')} large>
         <DeviceModulesSection />
+      </BottomSheet>
+
+      {/* ─── Database (HFSQL) Sheet ─── */}
+      <BottomSheet isOpen={activeSection === 'database'} onClose={() => setActiveSection(null)} title={t('settings.databaseTitle')} large>
+        <HfsqlSection />
       </BottomSheet>
 
       {/* ─── Business Type Sheet (read-only + request) ─── */}

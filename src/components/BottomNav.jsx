@@ -1,4 +1,5 @@
-﻿import { NavLink } from 'react-router-dom'
+﻿import { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import {
   ShoppingCartIcon,
   CubeIcon,
@@ -28,14 +29,20 @@ import {
   WrenchScrewdriverIcon as WrenchScrewdriverSolid,
 } from '@heroicons/react/24/solid'
 import { useAuthStore } from '../stores/authStore'
-import { usePosStore } from '../stores/posStore'
 import { useDeviceModulesStore } from '../stores/deviceModulesStore'
 import { hasModule } from '../utils/businessTypes'
 import { useTranslation } from 'react-i18next'
 
 export default function BottomNav() {
   const { t } = useTranslation()
-  const cartCount = usePosStore((s) => s.cart.length)
+  const [cartCount, setCartCount] = useState(0)
+  useEffect(() => {
+    import('../stores/posStore').then(mod => {
+      const update = () => setCartCount(mod.usePosStore.getState().cart.length)
+      update()
+      return mod.usePosStore.subscribe(update)
+    })
+  }, [])
   const businessType = useAuthStore((s) => s.businessType)
   const hasModuleOnDevice = useDeviceModulesStore(s => s.hasModuleOnDevice)
   useDeviceModulesStore(s => s._v)
