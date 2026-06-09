@@ -1,0 +1,11 @@
+node_modules
+dist
+.electron-builder-cache
+.npm-cache
+release*
+ss
+*.exe
+*.apk
+.env.local
+.env.*
+.vercel

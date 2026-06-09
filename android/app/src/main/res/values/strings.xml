@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">التاج الأخضر</string>
+    <string name="title_activity_main">التاج الأخضر</string>
+    <string name="package_name">com.greencrown.pos</string>
+    <string name="custom_url_scheme">com.greencrown.pos</string>
+</resources>

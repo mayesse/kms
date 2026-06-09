@@ -1,0 +1,11 @@
+node_modules
+android
+release
+.electron-builder-cache
+.npm-cache
+.vercel
+.cache
+*.exe
+*.asar
+dist/assets/*.map
+
