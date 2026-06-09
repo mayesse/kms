@@ -38,13 +38,13 @@ jobs:
         run: npx cap sync
 
       - name: Build APK
-        run: cd android && chmod +x gradlew && ./gradlew assembleRelease
+        run: cd android && chmod +x gradlew && ./gradlew assembleDebug
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
 
       - name: Rename APK
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk GreenCrownPOS.apk
+          find android/app/build/outputs/apk/debug/ -name '*.apk' | head -1 | xargs -I{} cp {} GreenCrownPOS.apk
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
