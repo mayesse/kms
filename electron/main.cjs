@@ -8,7 +8,7 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 let mainWindow = null
-const APP_VERSION = '2.1.7'
+const APP_VERSION = '2.1.9'
 const GITHUB_API = 'https://api.github.com/repos/mayesse/kms/releases/latest'
 const DIST_DIR = path.join(__dirname, '..', 'dist')
 const WARN = (...args) => console.warn('[main]', ...args)
